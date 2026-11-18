@@ -59,7 +59,7 @@ export function HeroSection() {
               <ArrowDownRight className="h-4 w-4" />
             </Button>
 
-            <Button href="/resume.pdf" download="Jeya_Surya_M_Resume.pdf" variant="secondary">
+            <Button href="/jeyasurya2106.pdf" download="Jeya_Surya_M_Resume.pdf" variant="secondary">
               <Download className="h-4 w-4" />
               <span>Download Resume</span>
             </Button>
