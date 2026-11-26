@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Bricolage_Grotesque, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { profileData } from "@/lib/profile";
@@ -10,9 +10,23 @@ const inter = Inter({
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-display",
+  display: "swap",
+});
+
+const serif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -20,8 +34,8 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jeyasurya.vercel.ap
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0f" },
+    { media: "(prefers-color-scheme: light)", color: "#f0ede3" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0c09" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -217,9 +231,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <noscript>
+          <style>{`[data-preloader]{display:none!important}`}</style>
+        </noscript>
       </head>
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased bg-slate-50 text-slate-900 dark:bg-obsidian dark:text-slate-100 selection:bg-cyanNeon/30 selection:text-cyanNeon transition-colors duration-300`}
+        className={`${inter.variable} ${display.variable} ${serif.variable} ${mono.variable} font-sans antialiased transition-colors duration-300`}
       >
         <ThemeProvider
           attribute="class"

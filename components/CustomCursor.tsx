@@ -1,55 +1,77 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
+/**
+ * A trailing ring that follows the native pointer.
+ * - grows over links / buttons
+ * - turns into a labelled blob over elements with `data-cursor="Label"`
+ */
 export function CustomCursor() {
+  const [enabled, setEnabled] = useState(false);
   const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
+  const [label, setLabel] = useState("");
 
-  const cursorX = useSpring(0, { stiffness: 450, damping: 28 });
-  const cursorY = useSpring(0, { stiffness: 450, damping: 28 });
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const sx = useSpring(x, { stiffness: 380, damping: 32, mass: 0.6 });
+  const sy = useSpring(y, { stiffness: 380, damping: 32, mass: 0.6 });
 
   useEffect(() => {
-    const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    if (isTouch) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    setEnabled(true);
 
-    const handleMove = (e: MouseEvent) => {
+    const onMove = (e: MouseEvent) => {
+      x.set(e.clientX);
+      y.set(e.clientY);
       setVisible(true);
-      cursorX.set(e.clientX - 16);
-      cursorY.set(e.clientY - 16);
 
       const target = e.target as HTMLElement | null;
-      if (target?.closest("a, button, input, textarea, [data-interactive]")) {
-        setHovering(true);
-      } else {
-        setHovering(false);
-      }
+      const labelled = target?.closest<HTMLElement>("[data-cursor]");
+      setLabel(labelled?.dataset.cursor ?? "");
+      setHovering(!!target?.closest("a, button, input, textarea, [data-interactive]"));
     };
+    const onLeave = () => setVisible(false);
 
-    const handleLeave = () => setVisible(false);
-
-    window.addEventListener("mousemove", handleMove);
-    document.addEventListener("mouseleave", handleLeave);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    document.documentElement.addEventListener("mouseleave", onLeave);
     return () => {
-      window.removeEventListener("mousemove", handleMove);
-      document.removeEventListener("mouseleave", handleLeave);
+      window.removeEventListener("mousemove", onMove);
+      document.documentElement.removeEventListener("mouseleave", onLeave);
     };
-  }, [cursorX, cursorY]);
+  }, [x, y]);
 
-  if (!visible) return null;
+  if (!enabled) return null;
+
+  const size = label ? 84 : hovering ? 56 : 28;
 
   return (
     <motion.div
-      style={{ x: cursorX, y: cursorY }}
-      animate={{
-        scale: hovering ? 1.5 : 1,
-        borderColor: hovering ? "#7c3aed" : "#00f0ff",
-      }}
-      transition={{ duration: 0.15 }}
-      className="pointer-events-none fixed top-0 left-0 z-50 hidden md:flex h-8 w-8 items-center justify-center rounded-full border border-cyanNeon/80 bg-cyanNeon/10 backdrop-blur-[1px]"
+      aria-hidden
+      style={{ x: sx, y: sy }}
+      className="pointer-events-none fixed left-0 top-0 z-[90]"
     >
-      <span className="h-1.5 w-1.5 rounded-full bg-cyanNeon" />
+      <motion.div
+        animate={{
+          width: size,
+          height: size,
+          opacity: visible ? 1 : 0,
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 26 }}
+        className={`flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full ${
+          label
+            ? "bg-volt text-onvolt"
+            : hovering
+              ? "border border-glow bg-glow/10"
+              : "border border-fg/50"
+        }`}
+      >
+        {label && (
+          <span className="label whitespace-nowrap text-[0.625rem] font-semibold">{label}</span>
+        )}
+      </motion.div>
     </motion.div>
   );
 }

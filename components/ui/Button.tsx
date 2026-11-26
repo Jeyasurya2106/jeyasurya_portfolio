@@ -1,87 +1,65 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { Magnetic } from "@/components/Magnetic";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary";
   href?: string;
   download?: boolean | string;
+  magnetic?: boolean;
   children: React.ReactNode;
 }
 
+/**
+ * Pill button. On hover a disc of the opposite colour rises from below
+ * and the label swaps colour with it.
+ */
 export function Button({
   variant = "primary",
   href,
   download,
+  magnetic = true,
   children,
   className = "",
-  onClick,
   ...props
 }: ButtonProps) {
-  const [ripples, setRipples] = useState<{ x: number; y: number; id: number }[]>([]);
-
-  const triggerRipple = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const id = Date.now();
-    setRipples((prev) => [...prev, { x, y, id }]);
-    setTimeout(() => {
-      setRipples((prev) => prev.filter((r) => r.id !== id));
-    }, 600);
-  };
-
-  const baseStyles =
-    "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl px-6 py-3 font-display text-sm font-semibold tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyanNeon/60";
+  const base =
+    "group relative inline-flex items-center justify-center overflow-hidden rounded-full px-7 py-4 font-display text-sm font-semibold tracking-tight transition-colors duration-500";
 
   const variants = {
-    primary:
-      "bg-gradient-to-r from-cyanNeon to-purpleElectric text-obsidian shadow-[0_0_20px_rgba(0,240,255,0.35)] hover:shadow-[0_0_32px_rgba(0,240,255,0.65)] hover:-translate-y-0.5",
-    secondary:
-      "border border-cyanNeon/40 bg-white/70 dark:bg-white/5 text-slate-900 dark:text-white backdrop-blur-md hover:border-cyanNeon hover:bg-cyanNeon/10 hover:shadow-[0_0_24px_rgba(0,240,255,0.25)] hover:-translate-y-0.5",
+    primary: "bg-volt text-onvolt hover:text-bg",
+    secondary: "border border-line/20 text-fg hover:border-volt hover:text-onvolt",
   };
 
-  const shimmer = (
-    <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+  const fill = variant === "primary" ? "bg-fg" : "bg-volt";
+
+  const inner = (
+    <>
+      <span
+        aria-hidden
+        className={`absolute inset-x-0 bottom-0 h-[220%] translate-y-full rounded-[50%] transition-transform duration-700 ease-expo group-hover:translate-y-1/4 ${fill}`}
+      />
+      <span className="relative z-10 flex items-center gap-2.5">{children}</span>
+    </>
   );
 
-  const rippleElements = ripples.map((r) => (
-    <span
-      key={r.id}
-      style={{ left: r.x, top: r.y }}
-      className="pointer-events-none absolute h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/40 animate-ripple"
-    />
-  ));
+  const cls = `${base} ${variants[variant]} ${className}`;
 
-  if (href) {
-    return (
-      <a
-        href={href}
-        download={download}
-        onClick={(e) => {
-          triggerRipple(e);
-        }}
-        className={`${baseStyles} ${variants[variant]} ${className}`}
-      >
-        {shimmer}
-        {rippleElements}
-        <span className="relative z-10 flex items-center gap-2">{children}</span>
-      </a>
-    );
-  }
-
-  return (
-    <button
-      onClick={(e) => {
-        triggerRipple(e);
-        onClick?.(e);
-      }}
-      className={`${baseStyles} ${variants[variant]} ${className}`}
-      {...props}
-    >
-      {shimmer}
-      {rippleElements}
-      <span className="relative z-10 flex items-center gap-2">{children}</span>
+  const el = href ? (
+    <a href={href} download={download} className={cls}>
+      {inner}
+    </a>
+  ) : (
+    <button className={cls} {...props}>
+      {inner}
     </button>
+  );
+
+  if (!magnetic) return el;
+  return (
+    <Magnetic strength={0.25} className={className.includes("w-full") ? "w-full" : ""}>
+      {el}
+    </Magnetic>
   );
 }

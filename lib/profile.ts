@@ -28,6 +28,7 @@ export interface ExperienceItem {
 
 export interface ProjectItem {
   title: string;
+  category: string;
   description: string;
   responsibilities: string[];
   techStack: string[];
@@ -47,11 +48,30 @@ export interface CertificationItem {
   year: string;
 }
 
+export interface ServiceItem {
+  title: string;
+  description: string;
+  tags: string[];
+}
+
+export interface AiToolItem {
+  name: string;
+  mark: string;
+  kind: string;
+  usage: string;
+}
+
 export interface ProfileData {
   name: string;
   role: string;
   tagline: string;
+  statement: string;
   summary: string;
+  focus: string[];
+  marquee: string[];
+  services: ServiceItem[];
+  aiTools: AiToolItem[];
+  aiPrinciples: { title: string; text: string }[];
   contact: {
     phone: string;
     email: string;
@@ -67,10 +87,114 @@ export interface ProfileData {
 }
 
 export const profileData: ProfileData = {
-  name: "JEYA SURYA M",
-  role: "MERN STACK DEVELOPER",
+  name: "Jeya Surya M",
+  role: "MERN Stack Developer",
   tagline:
-    "Architecting responsive, high-performance web applications with React.js, Node.js, and modern full-stack ecosystems.",
+    "Architecting responsive, high-performance web applications with React.js, Node.js and a modern, AI-assisted full-stack workflow.",
+  statement:
+    "I turn complex business workflows — supply chains, banking, ride dispatch, construction sites — into fast, clean and reliable web applications.",
+  focus: ["fast interfaces", "scalable APIs", "clean architecture", "AI-accelerated delivery"],
+  marquee: [
+    "React.js",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "NestJS",
+    "Express.js",
+    "MongoDB",
+    "PostgreSQL",
+    "Prisma",
+    "MySQL",
+    "GraphQL",
+    "Redux",
+    "Tailwind CSS",
+    "Jest",
+    "Vitest",
+  ],
+  services: [
+    {
+      title: "Frontend Engineering",
+      description:
+        "Responsive, accessible interfaces built from reusable components — dashboards, catalogs, forms and data-heavy screens that stay fast as they grow.",
+      tags: ["React.js", "Next.js", "TypeScript", "Redux", "Tailwind CSS"],
+    },
+    {
+      title: "Backend & API Development",
+      description:
+        "REST and GraphQL services with authentication, role-based access control and business logic structured so it can be tested and extended.",
+      tags: ["Node.js", "NestJS", "Express.js", "JWT", "GraphQL"],
+    },
+    {
+      title: "Database Design",
+      description:
+        "Schemas, relationships, migrations and query tuning across document and relational stores — chosen to fit the data, not the trend.",
+      tags: ["PostgreSQL", "Prisma", "MySQL", "MongoDB"],
+    },
+    {
+      title: "AI-Accelerated Delivery",
+      description:
+        "AI coding tools woven into the daily workflow for scaffolding, refactoring, tests and reviews — shipping sooner without lowering the bar.",
+      tags: ["Cursor", "Claude Code", "GitHub Copilot", "ChatGPT"],
+    },
+  ],
+  aiTools: [
+    {
+      name: "Cursor",
+      mark: "Cu",
+      kind: "AI code editor",
+      usage:
+        "My daily editor. Multi-file edits, codebase-aware chat and quick refactors across React and Node projects.",
+    },
+    {
+      name: "Claude Code",
+      mark: "Cl",
+      kind: "Agentic CLI",
+      usage:
+        "Longer tasks from the terminal — exploring unfamiliar code, wiring features end to end and writing tests alongside them.",
+    },
+    {
+      name: "GitHub Copilot",
+      mark: "Co",
+      kind: "Inline completion",
+      usage:
+        "Autocomplete for boilerplate, repetitive handlers, DTOs and unit-test cases while I stay focused on the logic.",
+    },
+    {
+      name: "ChatGPT",
+      mark: "Gp",
+      kind: "Reasoning partner",
+      usage:
+        "Talking through architecture trade-offs, debugging strategies, SQL tuning and clear documentation.",
+    },
+    {
+      name: "v0 by Vercel",
+      mark: "v0",
+      kind: "UI prototyping",
+      usage:
+        "Turning an idea into a first React + Tailwind draft in minutes, then rebuilding it properly as components.",
+    },
+    {
+      name: "Gemini",
+      mark: "Ge",
+      kind: "Research & review",
+      usage:
+        "A second opinion on approaches, quick research across docs and summarising long threads or specs.",
+    },
+  ],
+  aiPrinciples: [
+    {
+      title: "AI drafts, I decide",
+      text: "Tools propose. Architecture, naming and trade-offs stay my call.",
+    },
+    {
+      title: "Every diff gets read",
+      text: "Nothing generated ships without review, tests and a clear reason to exist.",
+    },
+    {
+      title: "Speed goes into quality",
+      text: "Time saved on boilerplate is spent on edge cases, accessibility and performance.",
+    },
+  ],
   summary:
     "MERN Stack Developer with 2.6 years of experience specializing in React.js, Node.js, and modern web technologies including HTML, CSS, JavaScript, and Bootstrap. Proficient in building responsive, high-performance user interfaces with a focus on clean design and seamless user experience, backed by a strong understanding of component-based architecture and front-end development best practices.",
   contact: {
@@ -97,9 +221,9 @@ export const profileData: ProfileData = {
   ],
   stats: [
     { label: "Years Experience", value: "2.6", suffix: "+" },
-    { label: "Core Stack Technologies", value: "18", suffix: "+" },
+    { label: "Core Technologies", value: "18", suffix: "+" },
     { label: "Enterprise Projects", value: "4", suffix: "" },
-    { label: "Architecture Focus", value: "100", suffix: "%" },
+    { label: "AI Tools in Workflow", value: "6", suffix: "" },
   ],
   skills: [
     {
@@ -162,6 +286,7 @@ export const profileData: ProfileData = {
   projects: [
     {
       title: "Supply Chain Management - B2B Application",
+      category: "B2B Commerce",
       description:
         "Web-based B2B platform streamlining transactions between suppliers, distributors, wholesalers, and retailers with product catalog management, bulk ordering, inventory tracking, and purchase order processing.",
       responsibilities: [
@@ -186,6 +311,7 @@ export const profileData: ProfileData = {
     },
     {
       title: "Digital Banking and Transaction Management System",
+      category: "FinTech",
       description:
         "Secure web-based banking platform enabling customers to inspect account balances, audit transaction history, manage beneficiaries, initiate fund transfers, and monitor transaction statuses alongside an admin dashboard.",
       responsibilities: [
@@ -211,6 +337,7 @@ export const profileData: ProfileData = {
     },
     {
       title: "Taxi Booking Application",
+      category: "Mobility",
       description:
         "On-demand taxi booking and dispatch platform featuring real-time ride tracking, route estimation, driver-passenger matching, and high-performance transactional data persistence.",
       responsibilities: [
@@ -233,6 +360,7 @@ export const profileData: ProfileData = {
     },
     {
       title: "Construction Site Management System",
+      category: "Operations",
       description:
         "Comprehensive web-based platform designed to manage construction site operations, inventory logistics, equipment deployment, workforce attendance, and project milestone reporting.",
       responsibilities: [

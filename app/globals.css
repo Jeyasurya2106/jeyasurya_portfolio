@@ -2,32 +2,140 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ------------------------------------------------------------------
+   Design tokens — "Volt on Ink"
+   Warm green-black ink, bone paper, volt lime and ember orange.
+   Values are RGB triplets so Tailwind can apply alpha to them.
+------------------------------------------------------------------- */
+:root {
+  --bg: 240 237 227;
+  --panel: 249 247 240;
+  --fg: 17 20 14;
+  --muted: 92 98 84;
+  --line: 17 20 14;
+  --volt: 205 255 56;
+  --glow: 66 100 0;
+  --ember: 222 70 24;
+}
+
+.dark {
+  --bg: 10 12 9;
+  --panel: 18 21 15;
+  --fg: 237 234 224;
+  --muted: 142 148 132;
+  --line: 237 234 224;
+  --volt: 212 255 62;
+  --glow: 212 255 62;
+  --ember: 255 110 64;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background: rgb(var(--bg));
+    color: rgb(var(--fg));
+  }
+
+  ::selection {
+    background: rgb(var(--volt));
+    color: #0a0c09;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--glow));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(var(--bg));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--line) / 0.18);
+    border-radius: 999px;
+    border: 2px solid rgb(var(--bg));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--glow) / 0.7);
   }
 }
 
-.cyber-grid {
-  background-size: 44px 44px;
-  background-image: 
-    linear-gradient(to right, rgba(0, 240, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(124, 58, 237, 0.06) 1px, transparent 1px);
-}
+@layer utilities {
+  /* Small mono caption used all over the page */
+  .label {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
 
-.dark .cyber-grid {
-  background-image: 
-    linear-gradient(to right, rgba(0, 240, 255, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(124, 58, 237, 0.07) 1px, transparent 1px);
-}
-
-@keyframes ripple {
-  to {
-    transform: scale(4);
-    opacity: 0;
+  .mask-fade-x {
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   }
 }
 
-.animate-ripple {
-  animation: ripple 0.6s linear;
+/* Film grain over everything */
+.grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -4%); }
+  60% { transform: translate(-2%, 3%); }
+  80% { transform: translate(3%, 1%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Spotlight that follows the pointer inside a card (see SpotlightCard) */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(var(--glow) / 0.14),
+    transparent 60%
+  );
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .grain,
+  .marquee-track,
+  .animate-spin-slow,
+  .animate-drift,
+  .animate-dash {
+    animation: none !important;
+  }
 }

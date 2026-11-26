@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Official portfolio of Jeya Surya M, a Full Stack Developer specializing in React.js, Next.js, Node.js, NestJS, TypeScript, PostgreSQL, and MySQL.",
     start_url: "/",
     display: "standalone",
-    background_color: "#0a0a0f",
-    theme_color: "#00f0ff",
+    background_color: "#0a0c09",
+    theme_color: "#d4ff3e",
     icons: [
       {
         src: "/icon.svg",

@@ -1,71 +1,55 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { GraduationCap, Award } from "lucide-react";
 import { profileData } from "@/lib/profile";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
+import { FadeUp } from "@/components/Reveal";
 
 export function EducationSection() {
+  const rows = [
+    ...profileData.education.map((edu) => ({
+      kind: "Education",
+      icon: GraduationCap,
+      title: edu.degree,
+      place: edu.institution,
+      when: edu.period,
+    })),
+    ...profileData.certifications.map((cert) => ({
+      kind: "Certification",
+      icon: Award,
+      title: cert.title,
+      place: cert.issuer,
+      when: cert.year,
+    })),
+  ];
+
   return (
-    <section id="education" className="px-4 py-20">
-      <div className="mx-auto max-w-5xl">
+    <section id="education" className="px-4 py-20 sm:px-6 sm:py-28">
+      <div className="mx-auto max-w-7xl">
         <SectionHeading
+          index="07"
           eyebrow="Credentials"
-          title="Education & Certifications"
-          subtitle="Academic background and verified technical credentials."
+          title="Education &"
+          accent="certification."
         />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {profileData.education.map((edu, idx) => (
-            <motion.div
-              key={edu.degree}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ delay: idx * 0.1, duration: 0.45 }}
-            >
-              <Card className="h-full">
-                <div className="flex items-start justify-between gap-3">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyanNeon/10 border border-cyanNeon/30 text-cyan-700 dark:text-cyanNeon">
-                    <GraduationCap className="h-5 w-5" />
+        <div className="border-b border-line/15">
+          {rows.map((row, i) => (
+            <FadeUp key={row.title} delay={i * 0.08}>
+              <div className="group grid grid-cols-1 items-center gap-3 border-t border-line/15 py-8 transition-[padding] duration-500 ease-expo hover:px-4 md:grid-cols-12 md:gap-8">
+                <span className="label flex items-center gap-3 text-muted md:col-span-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-line/15 text-fg transition-colors duration-500 group-hover:border-volt group-hover:bg-volt group-hover:text-onvolt">
+                    <row.icon className="h-4 w-4" />
                   </span>
-                  <Badge variant="cyan">{edu.period}</Badge>
-                </div>
-                <h3 className="mt-4 font-display text-lg font-bold text-slate-900 dark:text-white">
-                  {edu.degree}
+                  {row.kind}
+                </span>
+                <h3 className="font-display text-[clamp(1.5rem,2.8vw,2.25rem)] font-semibold leading-tight tracking-[-0.03em] md:col-span-5">
+                  {row.title}
                 </h3>
-                <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                  {edu.institution}
-                </p>
-              </Card>
-            </motion.div>
-          ))}
-
-          {profileData.certifications.map((cert, idx) => (
-            <motion.div
-              key={cert.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ delay: 0.15 + idx * 0.1, duration: 0.45 }}
-            >
-              <Card className="h-full">
-                <div className="flex items-start justify-between gap-3">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-purpleElectric/10 border border-purpleElectric/30 text-purple-600 dark:text-purple-300">
-                    <Award className="h-5 w-5" />
-                  </span>
-                  <Badge variant="purple">{cert.year}</Badge>
-                </div>
-                <h3 className="mt-4 font-display text-lg font-bold text-slate-900 dark:text-white">
-                  {cert.title}
-                </h3>
-                <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                  {cert.issuer}
-                </p>
-              </Card>
-            </motion.div>
+                <p className="font-serif text-xl italic text-muted md:col-span-3">{row.place}</p>
+                <span className="label text-glow md:col-span-1 md:text-right">{row.when}</span>
+              </div>
+            </FadeUp>
           ))}
         </div>
       </div>

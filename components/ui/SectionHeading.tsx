@@ -1,33 +1,58 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { RevealWords } from "@/components/Reveal";
 
 interface SectionHeadingProps {
+  index: string;
   eyebrow: string;
   title: string;
+  /** Closing words of the title, set in italic serif. */
+  accent?: string;
   subtitle?: string;
 }
 
-export function SectionHeading({ eyebrow, title, subtitle }: SectionHeadingProps) {
+export function SectionHeading({ index, eyebrow, title, accent, subtitle }: SectionHeadingProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.5 }}
-      className="mb-12 text-center"
-    >
-      <span className="inline-block rounded-full border border-cyanNeon/30 bg-cyanNeon/10 px-3.5 py-1 font-display text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700 dark:text-cyanNeon">
-        {eyebrow}
-      </span>
-      <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-        {title}
-      </h2>
-      {subtitle && (
-        <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600 dark:text-slate-400 sm:text-base">
-          {subtitle}
-        </p>
-      )}
-    </motion.div>
+    <div className="mb-14 sm:mb-20">
+      <div className="label flex items-center gap-4 text-muted">
+        <span className="text-glow">({index})</span>
+        <span>{eyebrow}</span>
+        <motion.span
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="h-px flex-1 origin-left bg-line/15"
+        />
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
+        <h2 className="font-display text-[clamp(2.25rem,6.2vw,5.25rem)] font-semibold leading-[0.98] tracking-[-0.035em] lg:col-span-8">
+          <RevealWords text={title} />
+          {accent && (
+            <>
+              {" "}
+              <RevealWords
+                text={accent}
+                delay={0.18}
+                wordClassName="font-serif font-normal italic tracking-[-0.01em] text-glow pr-[0.08em]"
+              />
+            </>
+          )}
+        </h2>
+        {subtitle && (
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.25 }}
+            className="max-w-sm text-sm leading-relaxed text-muted lg:col-span-4 lg:justify-self-end lg:pb-2"
+          >
+            {subtitle}
+          </motion.p>
+        )}
+      </div>
+    </div>
   );
 }

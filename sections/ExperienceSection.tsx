@@ -1,71 +1,98 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Briefcase } from "lucide-react";
+import { useRef } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { profileData } from "@/lib/profile";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { FadeUp } from "@/components/Reveal";
 
 export function ExperienceSection() {
+  const timelineRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 0.75", "end 0.6"],
+  });
+  const lineScale = useSpring(scrollYProgress, { stiffness: 90, damping: 24 });
+
   return (
-    <section id="experience" className="px-4 py-20">
-      <div className="mx-auto max-w-5xl">
+    <section id="experience" className="px-4 py-20 sm:px-6 sm:py-28">
+      <div className="mx-auto max-w-7xl">
         <SectionHeading
-          eyebrow="Career"
-          title="Work Experience"
-          subtitle="Production engineering roles delivering responsive applications and scalable APIs."
+          index="05"
+          eyebrow="Experience"
+          title="Where I've"
+          accent="shipped."
+          subtitle="Production roles delivering responsive applications and scalable APIs."
         />
 
-        <div className="relative border-l-2 border-cyanNeon/30 pl-6 sm:pl-10 space-y-10 ml-3">
-          {profileData.experience.map((exp, idx) => (
-            <motion.div
-              key={`${exp.company}-${exp.period}`}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ delay: idx * 0.15, duration: 0.5 }}
-              className="relative"
-            >
-              <span className="absolute -left-[35px] sm:-left-[51px] top-6 flex h-5 w-5 items-center justify-center rounded-full border-2 border-cyanNeon bg-obsidian shadow-[0_0_12px_rgba(0,240,255,0.8)]">
-                <span className="h-2 w-2 rounded-full bg-cyanNeon" />
-              </span>
+        <div ref={timelineRef} className="relative">
+          {/* rail + the line that draws itself as you scroll */}
+          <div aria-hidden className="absolute bottom-0 left-[5px] top-0 w-px bg-line/10 lg:left-[33.333%]" />
+          <motion.div
+            aria-hidden
+            style={{ scaleY: lineScale }}
+            className="absolute bottom-0 left-[5px] top-0 w-px origin-top bg-glow lg:left-[33.333%]"
+          />
 
-              <Card>
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-2 text-cyan-700 dark:text-cyanNeon font-semibold text-sm">
-                      <Briefcase className="h-4 w-4" />
-                      <span>{exp.company}</span>
-                    </div>
-                    <h3 className="mt-1 font-display text-xl font-bold text-slate-900 dark:text-white">
-                      {exp.role}
-                    </h3>
+          <div className="space-y-16 sm:space-y-24">
+            {profileData.experience.map((exp, idx) => (
+              <article
+                key={`${exp.company}-${exp.period}`}
+                className="relative grid grid-cols-1 gap-6 pl-9 lg:grid-cols-3 lg:gap-0 lg:pl-0"
+              >
+                <motion.span
+                  aria-hidden
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true, amount: 1 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 16 }}
+                  className="absolute left-0 top-2 flex h-[11px] w-[11px] items-center justify-center rounded-full bg-glow ring-4 ring-bg lg:left-[33.333%] lg:-translate-x-[5px]"
+                />
+
+                <FadeUp className="lg:pr-12">
+                  <div className="lg:sticky lg:top-28">
+                    <Badge variant={idx === 0 ? "volt" : "outline"}>{exp.period}</Badge>
+                    <p className="mt-4 font-serif text-3xl italic leading-tight">{exp.company}</p>
+                    {idx === 0 && (
+                      <p className="label mt-3 flex items-center gap-2 text-muted">
+                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-glow" />
+                        Current role
+                      </p>
+                    )}
                   </div>
-                  <Badge variant="purple">{exp.period}</Badge>
-                </div>
+                </FadeUp>
 
-                <ul className="mt-4 space-y-2.5 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-                  {exp.bullets.map((bullet, bIdx) => (
-                    <li key={bIdx} className="flex items-start gap-2.5">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyanNeon" />
-                      <span>{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
+                <FadeUp delay={0.1} className="lg:col-span-2 lg:pl-14">
+                  <h3 className="font-display text-[clamp(1.75rem,3.4vw,2.75rem)] font-semibold leading-none tracking-[-0.035em]">
+                    {exp.role}
+                  </h3>
 
-                {exp.techStack && exp.techStack.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-200 dark:border-white/10 pt-3">
-                    {exp.techStack.map((tech) => (
-                      <Badge key={tech} variant="cyan">
-                        {tech}
-                      </Badge>
+                  <ul className="mt-7">
+                    {exp.bullets.map((bullet, bIdx) => (
+                      <li
+                        key={bIdx}
+                        className="group flex gap-5 border-t border-line/10 py-4 text-sm leading-relaxed text-muted transition-colors duration-300 hover:text-fg"
+                      >
+                        <span className="label pt-0.5 text-glow/70 transition-colors group-hover:text-glow">
+                          {String(bIdx + 1).padStart(2, "0")}
+                        </span>
+                        <span>{bullet}</span>
+                      </li>
                     ))}
-                  </div>
-                )}
-              </Card>
-            </motion.div>
-          ))}
+                  </ul>
+
+                  {exp.techStack && exp.techStack.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {exp.techStack.map((tech) => (
+                        <Badge key={tech}>{tech}</Badge>
+                      ))}
+                    </div>
+                  )}
+                </FadeUp>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

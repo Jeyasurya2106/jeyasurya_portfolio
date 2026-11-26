@@ -3,61 +3,59 @@
 import { motion } from "framer-motion";
 import { profileData } from "@/lib/profile";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Card } from "@/components/ui/Card";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
+import { FadeUp } from "@/components/Reveal";
 
 export function SkillsSection() {
   return (
-    <section id="skills" className="px-4 py-20">
-      <div className="mx-auto max-w-6xl">
+    <section id="skills" className="px-4 py-20 sm:px-6 sm:py-28">
+      <div className="mx-auto max-w-7xl">
         <SectionHeading
-          eyebrow="Capabilities"
-          title="Technical Arsenal"
-          subtitle="Full-stack technologies, frameworks, databases, and testing suites."
+          index="03"
+          eyebrow="Skills"
+          title="The stack I"
+          accent="reach for."
+          subtitle="Frameworks, runtimes, databases and testing tools I use in production."
         />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
           {profileData.skills.map((group, groupIdx) => (
-            <motion.div
-              key={group.category}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ delay: groupIdx * 0.12, duration: 0.5 }}
-            >
-              <Card className="h-full">
-                <h3 className="font-display text-lg font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-white/10 pb-3">
-                  {group.category}
-                </h3>
+            <FadeUp key={group.category} delay={groupIdx * 0.1} className="h-full">
+              <SpotlightCard className="h-full p-7 sm:p-8">
+                <div className="flex items-start justify-between gap-4">
+                  <h3 className="font-display text-2xl font-semibold leading-tight tracking-[-0.03em]">
+                    {group.category}
+                  </h3>
+                  <span className="label shrink-0 pt-1.5 text-glow">
+                    {String(group.items.length).padStart(2, "0")}
+                  </span>
+                </div>
 
-                <div className="mt-5 space-y-4">
+                <ul className="mt-8 space-y-5">
                   {group.items.map((skill, idx) => (
-                    <div key={skill.name}>
-                      <div className="flex justify-between text-xs font-medium mb-1.5">
-                        <span className="text-slate-800 dark:text-slate-200">
-                          {skill.name}
-                        </span>
-                        <span className="text-cyan-700 dark:text-cyanNeon">
-                          {skill.proficiency}%
-                        </span>
+                    <li key={skill.name}>
+                      <div className="flex items-baseline justify-between gap-4">
+                        <span className="text-sm font-medium">{skill.name}</span>
+                        <span className="label text-muted">{skill.proficiency}</span>
                       </div>
-                      <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
+                      <div className="mt-2.5 h-px w-full bg-line/10">
                         <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.proficiency}%` }}
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: skill.proficiency / 100 }}
                           viewport={{ once: true }}
                           transition={{
-                            delay: 0.15 + idx * 0.06,
-                            duration: 0.8,
-                            ease: "easeOut",
+                            delay: 0.2 + idx * 0.07,
+                            duration: 1.3,
+                            ease: [0.16, 1, 0.3, 1],
                           }}
-                          className="h-full rounded-full bg-gradient-to-r from-cyanNeon to-purpleElectric shadow-[0_0_10px_rgba(0,240,255,0.5)]"
+                          className="h-[2px] w-full origin-left -translate-y-px bg-glow"
                         />
                       </div>
-                    </div>
+                    </li>
                   ))}
-                </div>
-              </Card>
-            </motion.div>
+                </ul>
+              </SpotlightCard>
+            </FadeUp>
           ))}
         </div>
       </div>
