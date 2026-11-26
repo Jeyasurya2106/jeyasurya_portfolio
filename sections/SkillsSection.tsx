@@ -15,10 +15,10 @@ export function SkillsSection() {
           eyebrow="Skills"
           title="The stack I"
           accent="reach for."
-          subtitle="Frameworks, runtimes, databases and testing tools I use in production."
+          subtitle="Frameworks, runtimes, databases, testing, cloud and DevOps tools I use in production."
         />
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           {profileData.skills.map((group, groupIdx) => (
             <FadeUp key={group.category} delay={groupIdx * 0.1} className="h-full">
               <SpotlightCard className="h-full p-7 sm:p-8">

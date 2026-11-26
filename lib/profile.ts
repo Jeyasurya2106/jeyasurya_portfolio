@@ -108,6 +108,9 @@ export const profileData: ProfileData = {
     "GraphQL",
     "Redux",
     "Tailwind CSS",
+    "Docker",
+    "AWS",
+    "Nginx",
     "Jest",
     "Vitest",
   ],
@@ -129,6 +132,12 @@ export const profileData: ProfileData = {
       description:
         "Schemas, relationships, migrations and query tuning across document and relational stores — chosen to fit the data, not the trend.",
       tags: ["PostgreSQL", "Prisma", "MySQL", "MongoDB"],
+    },
+    {
+      title: "Cloud & DevOps",
+      description:
+        "Containerised services shipped to AWS and Vercel through CI/CD pipelines — Dockerised backends on EC2, media on S3, Nginx in front and zero-downtime frontend releases.",
+      tags: ["AWS", "Docker", "CI/CD", "Linux", "Nginx", "Vercel"],
     },
     {
       title: "AI-Accelerated Delivery",
@@ -254,6 +263,16 @@ export const profileData: ProfileData = {
         { name: "PostgreSQL & Prisma ORM", proficiency: 90 },
         { name: "MySQL", proficiency: 92 },
         { name: "Jest , Enzyme (Unit Testing) , Vitest", proficiency: 88 },
+      ],
+    },
+    {
+      category: "Cloud & DevOps",
+      items: [
+        { name: "AWS (EC2, S3, IAM)", proficiency: 82 },
+        { name: "Docker & Containerization", proficiency: 85 },
+        { name: "CI/CD Pipelines", proficiency: 80 },
+        { name: "Linux & Nginx", proficiency: 80 },
+        { name: "Vercel Deployments", proficiency: 92 },
       ],
     },
   ],

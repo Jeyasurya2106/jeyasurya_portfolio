@@ -14,7 +14,7 @@ export function ServicesSection() {
           eyebrow="What I do"
           title="From first pixel"
           accent="to final query."
-          subtitle="Four things I do well, and usually do together on the same product."
+          subtitle="Five things I do well, and usually do together on the same product."
         />
 
         <ul className="border-b border-line/15">
